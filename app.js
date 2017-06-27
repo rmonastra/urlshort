@@ -54,10 +54,9 @@ app.post('/api/shorturl/new', (req, res) => {
 app.get("/api/shorturl/:urlShort", (req, res) => {
   shortUrl.findOne({
     short_url: req.params.urlShort
-  }, (err, data) => {
-    if (err) return res.json("It's not me, it's you");
+  }, (data) => {
     console.log(data);
-    return data ? res.redirect("https://" + data.original_url) : res.send("Error, remind me to never let you guide me!");
+    return data ? res.redirect("https://" + data.original_url) : res.send("Error redirecting from the short Url");
     
   });
 });
