@@ -15,7 +15,8 @@ app.use(cors());
 app.use(bodyParser.urlencoded({
   extended: false
 }));
-app.use(express.static(process.cwd() + 'public'));
+app.use('/public', express.static(process.cwd() + '/public'));
+
 
 app.get('/', (req, res) => {
   res.sendFile(process.cwd() + '/views/index.html');
