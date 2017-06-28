@@ -52,8 +52,8 @@ app.post('/api/shorturl/new', (req, res) => {
 });
 
 app.get("/api/shorturl/:urlShort", (req, res) => {
+  short_url: req.params.urlShort
   shortUrl.findOne({
-    short_url: req.params.urlShort
   }, (data) => {
     console.log(data);
     return data ? res.redirect("https://" + data.original_url) : res.send("Error redirecting from the short Url");
