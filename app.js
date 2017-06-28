@@ -34,10 +34,11 @@ app.post('/api/shorturl/new', (req, res) => {
     let shortId = randomstring.generate(6);
 
     if (address) {
-      let postedUrl = new shortUrl({
-        original_url: findUrl
+      let postedUrl = new shortUrl({//user url
+        original_url: findUrl,
+        short_url: shortId
       });
-      postedUrl.save((err, url) => {
+      postedUrl.save((err, url) => { //saves to database
         res.json({
           original_url: findUrl,
           short_url: shortId
@@ -45,22 +46,31 @@ app.post('/api/shorturl/new', (req, res) => {
       })
     } else {
       res.json({
-        error: "Are you sure you typed something correctly?"
+        error: "Are you sure you typed everything correctly?"
       });
     }
   })
 });
 
 app.get("/api/shorturl/:urlShort", (req, res) => {
-  short_url: req.params.urlShort
-  shortUrl.findOne({
-  }, (data) => {
-    console.log(data);
-    return data ? res.redirect("https://" + data.original_url) : res.send("Error redirecting from the short Url");
-    
-  });
-});
+  
+  shorter_url = req.params.urlShort;//grabs short url
 
+ shortUrl.findOne({ 'short_url': shorter_url })
+.then( (data) => {
+   
+ let format = new RegExp("^(http|https)://", "i");
+    let checkForShort = data.original_url;
+//if statement to check for original url from short url entered
+    if(format.test(checkForShort)){
+      return res.redirect(data.original_url);
+    }else{
+      return res.redirect("https://" + data.original_url);
+   }
+
+ });
+});
+    //return data ? res.redirect("https://" + data.original_url) : res.send("Error redirecting from the short Url");
 //Listen on connection port
 let port = process.env.PORT || 3000;
 app.listen(port, () => {
